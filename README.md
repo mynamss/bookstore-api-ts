@@ -1,3 +1,9 @@
+# bookstore-api-ts
+This repository is dedicated to a restful online bookstore api that uses : the 
+1. Typescript as primary language
+2. NestJs framework
+3. PostgreSQL database
+4. Prisma ORM.
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
