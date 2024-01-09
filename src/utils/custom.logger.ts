@@ -66,7 +66,7 @@ export class CustomLogger {
             winston.format.colorize(),
             winston.format.simple(),
             winston.format.printf(({ level, message, timestamp }) => {
-              return `[${timestamp}] [${level}]: ${message}`;
+              return `[${timestamp}] [${level}] : ${message}`;
             }),
           ),
           level: 'info' || 'warn',

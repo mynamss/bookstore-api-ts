@@ -10,8 +10,222 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+MALE
+FEMALE
+}
+
+model Role {
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  user User[]
+  
+  code String
+  name String
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  role Role @relation(fields: [roleId], references: [id])
+  occupation Occupation? @relation(fields: [occupationId], references: [id])
+  shippingAddress ShippingAddress[]
+  hobby UserHobby[]
+  category FavoriteCategory[]
+
+  roleId String @db.Uuid
+  occupationId String? @db.Uuid
+  
+  fullName String?
+  email String @unique
+  password String
+  gender Gender?
+  birthDate DateTime?
+  phone String
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+  @@index([roleId])
+  @@index([occupationId])
+}
+
+model Occupation {
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  user User[]
+
+  code String
+  name String
+  details String?
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+}
+
+model ShippingAddress{
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  user User @relation(fields: [userId], references: [id])
+  
+  userId String @db.Uuid
+
+  label String
+  recipients String
+  phone String
+  provinceCode Int
+  districtCode Int
+  subDistrictCode Int
+  villageCode Int
+  postCode Int
+  details String?
+  
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+  @@index([userId])
+}
+
+model UserHobby { 
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  user User? @relation(fields: [userId], references: [id])
+  hobby Hobby? @relation(fields: [hobbyId], references: [id])
+
+  userId String? @db.Uuid
+  hobbyId String? @db.Uuid
+  
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+  
+  @@index([id])
+  @@index([userId])
+  @@index([hobbyId])
+}
+
+model Hobby {
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  user UserHobby[]
+  
+  code String
+  name String
+
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+}
+
+model Category {
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  subCategory SubCategory[]
+  user FavoriteCategory[]
+
+  code String
+  name String
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+}
+
+model SubCategory {
+  id String @default(uuid()) @db.Uuid @unique
+  // relation
+  category Category @relation(fields: [categoryId], references: [id])
+
+  categoryId String @db.Uuid
+  
+  code String
+  name String
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+  @@index([categoryId])
+}
+
+model FavoriteCategory { 
+  id String @default(uuid()) @db.Uuid @unique
+
+  user User? @relation(fields: [userId], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id])
+
+  userId String? @db.Uuid
+  categoryId String? @db.Uuid
+
+  // timestamp
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  
+  createdBy String? @db.Uuid
+  updatedBy String? @db.Uuid
+
+  deletedAt DateTime?
+
+  @@index([id])
+  @@index([userId])
+  @@index([categoryId])
 }
